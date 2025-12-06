@@ -1,0 +1,26 @@
+INFO:     Started server process [1]
+2025-12-06T16:44:00.622222205Z INFO:     Waiting for application startup.
+2025-12-06T16:44:00.622491999Z INFO:     Application startup complete.
+2025-12-06T16:44:00.622745699Z INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-12-06T17:51:05.885326625Z INFO:     172.19.0.1:38376 - "GET / HTTP/1.1" 404 Not Found
+2025-12-06T17:51:06.289962136Z INFO:     172.19.0.1:38376 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+2025-12-06T17:51:08.783292056Z INFO:     172.19.0.1:38376 - "GET /docs HTTP/1.1" 200 OK
+2025-12-06T17:51:09.395430752Z INFO:     172.19.0.1:38376 - "GET /openapi.json HTTP/1.1" 200 OK
+2025-12-06T17:53:49.367652501Z INFO:     172.19.0.1:37448 - "GET / HTTP/1.1" 404 Not Found
+2025-12-06T17:53:49.719105993Z INFO:     172.19.0.1:37448 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+2025-12-06T17:53:52.349458514Z INFO:     172.19.0.1:37448 - "GET /dcs HTTP/1.1" 404 Not Found
+2025-12-06T17:53:56.014180200Z INFO:     172.19.0.1:37448 - "GET /docs HTTP/1.1" 200 OK
+2025-12-06T17:53:56.340022368Z INFO:     172.19.0.1:37448 - "GET /openapi.json HTTP/1.1" 200 OK
+2025-12-06T17:54:20.715258067Z INFO:     172.19.0.1:37458 - "GET /api/messages HTTP/1.1" 200 OK
+2025-12-06T17:54:41.394649576Z INFO:     172.19.0.1:38090 - "GET /api/messages HTTP/1.1" 200 OK
+2025-12-06T17:54:51.614653039Z INFO:     [Replicator] Sending 'First message' to secondary-1:50051...
+2025-12-06T17:54:51.626884523Z INFO:     [Replicator] Sending 'First message' to secondary-2:50051...
+2025-12-06T17:54:56.635365993Z INFO:     [Replicator] ACK from secondary-1:50051
+2025-12-06T17:55:01.634251747Z INFO:     [Replicator] ACK from secondary-2:50051
+2025-12-06T17:55:01.635153975Z INFO:     172.19.0.1:47128 - "POST /api/messages HTTP/1.1" 200 OK
+2025-12-06T17:56:32.519287150Z INFO:     172.19.0.1:57564 - "GET /api/messages HTTP/1.1" 200 OK
+2025-12-06T17:56:55.273535544Z INFO:     [Replicator] Sending 'Second message' to secondary-1:50051...
+2025-12-06T17:56:55.274480209Z INFO:     [Replicator] Sending 'Second message' to secondary-2:50051...
+2025-12-06T17:57:00.277851212Z INFO:     [Replicator] ACK from secondary-1:50051
+2025-12-06T17:57:05.278403037Z INFO:     [Replicator] ACK from secondary-2:50051
+2025-12-06T17:57:05.279320249Z INFO:     172.19.0.1:60456 - "POST /api/messages HTTP/1.1" 200 OK
