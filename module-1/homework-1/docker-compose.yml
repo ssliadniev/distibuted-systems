@@ -1,0 +1,34 @@
+services:
+  master:
+    build:
+      context: .
+      dockerfile: master_service/Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - secondary-1
+      - secondary-2
+
+  secondary-1:
+    build:
+      context: .
+      dockerfile: secondary_service/Dockerfile
+    environment:
+      - DELAY_SECONDS=5
+    env_file:
+      - .env
+    ports:
+      - "8001:8000"
+
+  secondary-2:
+    build:
+      context: .
+      dockerfile: secondary_service/Dockerfile
+    environment:
+      - DELAY_SECONDS=10
+    env_file:
+      - .env
+    ports:
+      - "8002:8000"

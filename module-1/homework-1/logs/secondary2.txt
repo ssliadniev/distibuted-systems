@@ -1,0 +1,11 @@
+INFO:uvicorn:gRPC Server listening on port 50051
+2025-12-06T16:44:00.539352011Z INFO:     Started server process [1]
+2025-12-06T16:44:00.539385971Z INFO:     Waiting for application startup.
+2025-12-06T16:44:00.539986233Z INFO:     Application startup complete.
+2025-12-06T16:44:00.540206656Z INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-12-06T17:54:51.632598030Z INFO:     [gRPC] Received append: 'First message'
+2025-12-06T17:54:51.632678600Z INFO:     [gRPC] Sleeping for 10 seconds...
+2025-12-06T17:55:01.633585544Z INFO:     [gRPC] Message committed.
+2025-12-06T17:56:55.276401611Z INFO:     [gRPC] Received append: 'Second message'
+2025-12-06T17:56:55.276455825Z INFO:     [gRPC] Sleeping for 10 seconds...
+2025-12-06T17:57:05.277382947Z INFO:     [gRPC] Message committed.
