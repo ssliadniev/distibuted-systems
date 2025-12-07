@@ -1,0 +1,17 @@
+INFO:uvicorn:gRPC Server listening on port 50051
+2025-12-07T18:40:22.149120376Z INFO:     Started server process [1]
+2025-12-07T18:40:22.149281715Z INFO:     Waiting for application startup.
+2025-12-07T18:40:22.150016548Z INFO:     Application startup complete.
+2025-12-07T18:40:22.150421311Z INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-12-07T18:40:36.771708375Z INFO:     172.19.0.1:53414 - "GET /docs HTTP/1.1" 200 OK
+2025-12-07T18:40:37.024921853Z INFO:     172.19.0.1:53414 - "GET /openapi.json HTTP/1.1" 200 OK
+2025-12-07T18:41:20.989032789Z INFO:     [gRPC] Received append ID=1: 'Message #1'
+2025-12-07T18:41:20.989069183Z INFO:     [gRPC] Message 1 committed.
+2025-12-07T18:41:26.423816627Z INFO:     [gRPC] Received append ID=2: 'Message #2'
+2025-12-07T18:41:26.423916196Z INFO:     [gRPC] Message 2 committed.
+2025-12-07T18:41:30.835835878Z INFO:     [gRPC] Received append ID=3: 'Message #3'
+2025-12-07T18:41:30.835922813Z INFO:     [gRPC] Message 3 committed.
+2025-12-07T18:41:34.299405535Z INFO:     [gRPC] Received append ID=4: 'Message #4'
+2025-12-07T18:41:34.299457727Z INFO:     [gRPC] Message 4 committed.
+2025-12-07T18:41:46.844308199Z INFO:     [Message Storage] Send stored messages: ['Message #1', 'Message #2', 'Message #3', 'Message #4']
+2025-12-07T18:41:46.844776382Z INFO:     172.19.0.1:48882 - "GET /api/messages HTTP/1.1" 200 OK
