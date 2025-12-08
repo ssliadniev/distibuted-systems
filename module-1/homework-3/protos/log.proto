@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package replicatedlog;
+
+service ReplicationService {
+  rpc AppendMessage (LogMessage) returns (Ack);
+  rpc Heartbeat (Empty) returns (Ack);
+}
+
+message LogMessage {
+  int64 id = 1;
+  string content = 2;
+}
+
+message Ack {
+  bool success = 1;
+}
+
+message Empty {}
