@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import threading
 
@@ -14,21 +15,24 @@ class MessageService:
     Service for managing the write-ahead log and coordinating replication with write concern.
     """
 
-    _messages: list[str] = []
-    _messages_lock = threading.Lock()
+    def __init__(self):
+        self._messages: list[str] = []
+        self._id_counter: int = 0
 
-    _id_counter = 0
-    _id_lock = threading.Lock()
+        self._lock = threading.Lock()
+        self._replicator = GrpcReplicator(settings.secondary_hosts, settings.timeout)
 
-    _replicator = GrpcReplicator(settings.secondary_hosts, settings.timeout)
-
-    def _get_next_id(self) -> int:
+    async def start_background_tasks(self):
         """
-        Increments and returns the next unique message ID.
+        Starts the replicator's background tasks.
         """
-        with self._id_lock:
-            self._id_counter += 1
-            return self._id_counter
+        await self._replicator.start()
+
+    async def stop_background_tasks(self):
+        """
+        Stops background tasks gracefully.
+        """
+        await self._replicator.stop()
 
     async def append_message(self, content: str, write_concern: int) -> int:
         """
@@ -50,13 +54,14 @@ class MessageService:
                 detail="Quorum lost. Master is in Read-Only mode."
             )
 
-        msg_id = self._get_next_id()
-
-        with self._messages_lock:
+        with self._lock:
+            self._id_counter += 1
+            msg_id = self._id_counter
             self._messages.append(content)
 
-        success = await self._replicator.replicate_message(msg_id, content, write_concern)
+        logger.info(f"[Message Service] Assigned ID={msg_id} to '{content}'")
 
+        success = await self._replicator.replicate_message(msg_id, content, write_concern)
         if not success:
             raise HTTPException(
                 status_code=500,
@@ -69,17 +74,17 @@ class MessageService:
         """
         Retrieves all messages committed to the Master's log.
         """
-        with self._messages_lock:
+        with self._lock:
             stored_messages = list(self._messages)
-            logger.info(f"[Message Service] Send stored messages: {stored_messages}")
+            logger.info(f"[Message Service] Retrieve stored messages: {stored_messages}")
             return stored_messages
 
     def get_health(self):
         """
-        Returns the status of all nodes.
+        Returns the health status of all nodes.
         """
         return {
             "master": "Healthy",
-            "secondaries": {k: v.value for k, v in self._replicator.health_status.items()},
+            "secondaries": asyncio.run(self._replicator.get_health()),
             "quorum": self._replicator.get_quorum_status()
         }

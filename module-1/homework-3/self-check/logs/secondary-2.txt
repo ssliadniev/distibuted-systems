@@ -1,0 +1,20 @@
+INFO:uvicorn:gRPC Server listening on port 50051
+2025-12-10T00:44:42.547049010Z INFO:     Started server process [1]
+2025-12-10T00:44:42.547085158Z INFO:     Waiting for application startup.
+2025-12-10T00:44:42.547417380Z INFO:     Application startup complete.
+2025-12-10T00:44:42.547732214Z INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-12-10T00:44:48.673515867Z INFO:     172.19.0.1:48096 - "GET /api/messages HTTP/1.1" 200 OK
+2025-12-10T00:44:49.180464110Z INFO:     [gRPC] Received append ID=2: 'Message #2'
+2025-12-10T00:44:49.180512296Z INFO:     [gRPC] Message 2 sleeping for 10s...
+2025-12-10T00:44:49.812560117Z INFO:     [gRPC] Received append ID=4: 'Message #4'
+2025-12-10T00:44:49.812599698Z INFO:     [gRPC] Message 4 sleeping for 10s...
+2025-12-10T00:44:49.954162130Z INFO:     [gRPC] Received append ID=3: 'Message #3'
+2025-12-10T00:44:49.954197526Z INFO:     [gRPC] Message 3 sleeping for 10s...
+2025-12-10T00:44:50.706605332Z INFO:     [gRPC] Received append ID=1: 'Message #1'
+2025-12-10T00:44:50.706648992Z INFO:     [gRPC] Message 1 sleeping for 10s...
+2025-12-10T00:44:59.181555995Z INFO:     [gRPC] Message 2 committed.
+2025-12-10T00:44:59.814081687Z INFO:     [gRPC] Message 4 committed.
+2025-12-10T00:44:59.955567091Z INFO:     [gRPC] Message 3 committed.
+2025-12-10T00:45:00.708049568Z INFO:     [gRPC] Message 1 committed.
+2025-12-10T00:45:09.956342584Z INFO:     [Message Storage] Returning 4 sequential messages: ['Message #1', 'Message #2', 'Message #3', 'Message #4']
+2025-12-10T00:45:09.957034659Z INFO:     172.19.0.1:57768 - "GET /api/messages HTTP/1.1" 200 OK
