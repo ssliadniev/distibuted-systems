@@ -169,8 +169,7 @@ class GrpcReplicator:
         Retries indefinitely with exponential backoff until success.
         """
         attempt = 0
-        backoff = 1
-        max_backoff = 30
+        backoff = self.RETRY_INITIAL_BACKOFF
 
         while True:
             try:
@@ -194,4 +193,4 @@ class GrpcReplicator:
                 logger.warning(f"[Replicator]  Failed to send {msg_id} to {host}: {error}. Retrying in {backoff}s...")
 
                 await asyncio.sleep(backoff)
-                backoff = min(backoff * 2, max_backoff)
+                backoff = min(backoff * 2, self.RETRY_MAX_BACKOFF)
