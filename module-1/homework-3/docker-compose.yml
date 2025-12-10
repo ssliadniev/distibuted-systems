@@ -27,7 +27,7 @@ services:
       context: .
       dockerfile: secondary_service/Dockerfile
     environment:
-      - DELAY_SECONDS=15
+      - DELAY_SECONDS=10
     env_file:
       - .env
     ports:
