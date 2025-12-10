@@ -57,7 +57,8 @@ class MessageStorage:
                 else:
                     break
 
-            logger.info(f"[Storage] Returning {len(consistent_messages)} sequential messages: {consistent_messages}")
+            logger.info(f"[Message Storage] Returning {len(consistent_messages)} sequential messages"
+                        f": {consistent_messages}")
             return consistent_messages
 
 
