@@ -1,0 +1,25 @@
+services:
+  server:
+    build: .
+    container_name: web-counter-server
+    ports:
+      - "8000:8000"
+    environment:
+      - STORAGE_TYPE=${STORAGE_TYPE:-memory}
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/count"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  benchmark:
+    build: .
+    container_name: web-counter-benchmark
+    command: python benchmark.py
+    environment:
+      - SERVER_URL=http://server:8000
+    depends_on:
+      server:
+        condition: service_started
