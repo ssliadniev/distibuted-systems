@@ -1,0 +1,21 @@
+services:
+  mongodb:
+    image: mongo:8.2
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  app:
+    build: .
+    container_name: mongo_app
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/
+    volumes:
+      - ./src:/app/src
+
+volumes:
+  mongo_data:
