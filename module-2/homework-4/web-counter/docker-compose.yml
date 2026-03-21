@@ -1,0 +1,32 @@
+services:
+  server:
+    build: .
+    container_name: server
+    ports:
+      - "8000:8000"
+    environment:
+      - STORAGE_TYPE=mongo
+      - MONGO_URI=mongodb://mongodb:27017/
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/count')" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mongodb:
+    image: mongo:8.2
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+
+  benchmark:
+    build: .
+    container_name: benchmark
+    command: python benchmark.py
+    environment:
+      - SERVER_URL=http://server:8000
+    depends_on:
+      server:
+        condition: service_healthy
