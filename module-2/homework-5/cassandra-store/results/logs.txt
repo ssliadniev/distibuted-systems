@@ -1,0 +1,99 @@
+2026-03-23 22:20:39,984 | INFO     | Successfully connected to Cassandra!
+2026-03-23T22:20:39.984473080Z 2026-03-23 22:20:39,984 | INFO     | ----- SETUP: creating keyspace and items table -----
+2026-03-23T22:20:40.709410759Z 2026-03-23 22:20:40,709 | INFO     | ----- INSERT: seeding items -----
+2026-03-23T22:20:40.891170904Z 2026-03-23 22:20:40,890 | INFO     | ----- DESCRIBE: items table -----
+2026-03-23T22:20:40.891579177Z 2026-03-23 22:20:40,891 | INFO     |
+2026-03-23T22:20:40.891596789Z CREATE TABLE store.items (
+2026-03-23T22:20:40.891602302Z     category text,
+2026-03-23T22:20:40.891606217Z     price decimal,
+2026-03-23T22:20:40.891610110Z     item_id uuid,
+2026-03-23T22:20:40.891614215Z     attributes map<text, text>,
+2026-03-23T22:20:40.891637397Z     name text,
+2026-03-23T22:20:40.891640795Z     producer text,
+2026-03-23T22:20:40.891643462Z     PRIMARY KEY (category, price, item_id)
+2026-03-23T22:20:40.891646595Z ) WITH CLUSTERING ORDER BY (price ASC, item_id ASC)
+2026-03-23T22:20:40.891649982Z     AND additional_write_policy = '99p'
+2026-03-23T22:20:40.891652888Z     AND bloom_filter_fp_chance = 0.01
+2026-03-23T22:20:40.891655752Z     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+2026-03-23T22:20:40.891658787Z     AND comment = ''
+2026-03-23T22:20:40.891661816Z     AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+2026-03-23T22:20:40.891665089Z     AND compression = {'chunk_length_in_kb': '16', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+2026-03-23T22:20:40.891668363Z     AND crc_check_chance = 1.0
+2026-03-23T22:20:40.891671564Z     AND default_time_to_live = 0
+2026-03-23T22:20:40.891674972Z     AND gc_grace_seconds = 864000
+2026-03-23T22:20:40.891677858Z     AND max_index_interval = 2048
+2026-03-23T22:20:40.891680734Z     AND memtable_flush_period_in_ms = 0
+2026-03-23T22:20:40.891683614Z     AND min_index_interval = 128
+2026-03-23T22:20:40.891686631Z     AND read_repair = 'BLOCKING'
+2026-03-23T22:20:40.891689575Z     AND speculative_retry = '99p';
+2026-03-23T22:20:40.891692544Z CREATE INDEX items_attributes_idx ON store.items (keys(attributes));
+2026-03-23T22:20:40.891695884Z CREATE INDEX items_attributes_idx_1 ON store.items (entries(attributes));
+2026-03-23T22:20:40.891699740Z CREATE INDEX items_name_idx ON store.items (name);
+2026-03-23T22:20:40.891703066Z CREATE INDEX items_producer_idx ON store.items (producer);
+2026-03-23T22:20:40.891706163Z 2026-03-23 22:20:40,891 | INFO     | ----- QUERY: all 'Phone' category items sorted by price -----
+2026-03-23T22:20:40.897374074Z 2026-03-23 22:20:40,897 | INFO     | {'name': 'iPhone 6', 'price': Decimal('600'), 'producer': 'Apple'}
+2026-03-23T22:20:40.897409224Z 2026-03-23 22:20:40,897 | INFO     | {'name': 'Galaxy S23', 'price': Decimal('900'), 'producer': 'Samsung'}
+2026-03-23T22:20:40.897425119Z 2026-03-23 22:20:40,897 | INFO     | {'name': 'iPhone 13', 'price': Decimal('1000'), 'producer': 'Apple'}
+2026-03-23T22:20:40.897704033Z 2026-03-23 22:20:40,897 | INFO     | ----- QUERY: 'Phone' category by name ('iPhone 6') -----
+2026-03-23T22:20:40.910369641Z 2026-03-23 22:20:40,910 | INFO     | {'name': 'iPhone 6', 'price': Decimal('600')}
+2026-03-23T22:20:40.910411519Z 2026-03-23 22:20:40,910 | INFO     | ----- QUERY: 'Phone' category with price between 500 and 950 -----
+2026-03-23T22:20:40.916818421Z 2026-03-23 22:20:40,916 | INFO     | {'name': 'iPhone 6', 'price': Decimal('600')}
+2026-03-23T22:20:40.916856180Z 2026-03-23 22:20:40,916 | INFO     | {'name': 'Galaxy S23', 'price': Decimal('900')}
+2026-03-23T22:20:40.916878466Z 2026-03-23 22:20:40,916 | INFO     | ----- QUERY: 'Phone' category by exact price and producer -----
+2026-03-23T22:20:40.925091076Z 2026-03-23 22:20:40,924 | INFO     | {'name': 'iPhone 6', 'price': Decimal('600'), 'producer': 'Apple'}
+2026-03-23T22:20:40.925128464Z 2026-03-23 22:20:40,924 | INFO     | ----- QUERY: 'TV' category possessing 'smart_tv' characteristic -----
+2026-03-23T22:20:40.935689945Z 2026-03-23 22:20:40,935 | INFO     | {'name': 'OLED55', 'attributes': OrderedMapSerializedKey([('resolution', '4K'), ('smart_tv', 'true')])}
+2026-03-23T22:20:40.935724873Z 2026-03-23 22:20:40,935 | INFO     | {'name': 'Bravia', 'attributes': OrderedMapSerializedKey([('refresh_rate', '120Hz'), ('smart_tv', 'true')])}
+2026-03-23T22:20:40.936408745Z 2026-03-23 22:20:40,935 | INFO     | ----- QUERY: 'Phone' category where color is 'Black' -----
+2026-03-23T22:20:40.945851332Z 2026-03-23 22:20:40,945 | INFO     | {'name': 'Galaxy S23', 'attributes': OrderedMapSerializedKey([('color', 'Black'), ('waterproof', 'true')])}
+2026-03-23T22:20:40.953835375Z 2026-03-23 22:20:40,953 | INFO     | ----- UPDATE: change color to space gray -----
+2026-03-23T22:20:40.968430009Z 2026-03-23 22:20:40,968 | INFO     | --- UPDATE: Add warranty property ---
+2026-03-23T22:20:40.976296209Z 2026-03-23 22:20:40,976 | INFO     | ----- UPDATE: remove memory property -----
+2026-03-23T22:20:40.999802859Z 2026-03-23 22:20:40,999 | INFO     | Updated item: {'name': 'iPhone 6', 'attributes': OrderedMapSerializedKey([('color', 'Space Gray'), ('warranty', '12 months')])}
+2026-03-23T22:20:41.000042051Z 2026-03-23 22:20:40,999 | INFO     | ----- SETUP: creating orders table -----
+2026-03-23T22:20:41.318678774Z 2026-03-23 22:20:41,318 | INFO     | ----- INSERT: seeding orders -----
+2026-03-23T22:20:41.358011761Z 2026-03-23 22:20:41,357 | INFO     | ----- DESCRIBE: orders table -----
+2026-03-23T22:20:41.358298518Z 2026-03-23 22:20:41,358 | INFO     |
+2026-03-23T22:20:41.358313170Z CREATE TABLE store.orders (
+2026-03-23T22:20:41.358317409Z     customer_name text,
+2026-03-23T22:20:41.358320932Z     order_date timestamp,
+2026-03-23T22:20:41.358324711Z     order_id uuid,
+2026-03-23T22:20:41.358327330Z     cost decimal,
+2026-03-23T22:20:41.358330148Z     item_names set<text>,
+2026-03-23T22:20:41.358333887Z     PRIMARY KEY (customer_name, order_date, order_id)
+2026-03-23T22:20:41.358337527Z ) WITH CLUSTERING ORDER BY (order_date DESC, order_id ASC)
+2026-03-23T22:20:41.358340676Z     AND additional_write_policy = '99p'
+2026-03-23T22:20:41.358343865Z     AND bloom_filter_fp_chance = 0.01
+2026-03-23T22:20:41.358347310Z     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
+2026-03-23T22:20:41.358351239Z     AND comment = ''
+2026-03-23T22:20:41.358354738Z     AND compaction = {'class': 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold': '32', 'min_threshold': '4'}
+2026-03-23T22:20:41.358358784Z     AND compression = {'chunk_length_in_kb': '16', 'class': 'org.apache.cassandra.io.compress.LZ4Compressor'}
+2026-03-23T22:20:41.358379024Z     AND crc_check_chance = 1.0
+2026-03-23T22:20:41.358382644Z     AND default_time_to_live = 0
+2026-03-23T22:20:41.358386109Z     AND gc_grace_seconds = 864000
+2026-03-23T22:20:41.358389634Z     AND max_index_interval = 2048
+2026-03-23T22:20:41.358393411Z     AND memtable_flush_period_in_ms = 0
+2026-03-23T22:20:41.358397628Z     AND min_index_interval = 128
+2026-03-23T22:20:41.358401217Z     AND read_repair = 'BLOCKING'
+2026-03-23T22:20:41.358404760Z     AND speculative_retry = '99p';
+2026-03-23T22:20:41.358408398Z CREATE INDEX orders_item_names_idx ON store.orders (values(item_names));
+2026-03-23T22:20:41.358414790Z 2026-03-23 22:20:41,358 | INFO     | ----- QUERY: Ivan's orders sorted by time -----
+2026-03-23T22:20:41.362881438Z 2026-03-23 22:20:41,362 | INFO     | {'customer_name': 'Ivan', 'order_date': datetime.datetime(2026, 3, 22, 22, 20, 41), 'cost': Decimal('1200')}
+2026-03-23T22:20:41.362919656Z 2026-03-23 22:20:41,362 | INFO     | {'customer_name': 'Ivan', 'order_date': datetime.datetime(2026, 3, 21, 22, 20, 41), 'cost': Decimal('1500')}
+2026-03-23T22:20:41.362954010Z 2026-03-23 22:20:41,362 | INFO     | ----- QUERY: Ivan's orders containing 'iPhone 6' -----
+2026-03-23T22:20:41.367420151Z 2026-03-23 22:20:41,367 | INFO     | {'order_date': datetime.datetime(2026, 3, 21, 22, 20, 41), 'item_names': SortedSet(['Galaxy S23', 'iPhone 6'])}
+2026-03-23T22:20:41.367884383Z 2026-03-23 22:20:41,367 | INFO     | ----- QUERY: Ivan's order count in the last 7 days -----
+2026-03-23T22:20:41.391223861Z 2026-03-23 22:20:41,391 | INFO     | Total orders: 2
+2026-03-23T22:20:41.391282017Z 2026-03-23 22:20:41,391 | INFO     | ----- QUERY: total sum of Ivan's orders -----
+2026-03-23T22:20:41.399663999Z 2026-03-23 22:20:41,399 | INFO     | Sum: 2700
+2026-03-23T22:20:41.399692459Z 2026-03-23 22:20:41,399 | INFO     | ----- QUERY: max cost of Ivan's orders -----
+2026-03-23T22:20:41.403561285Z 2026-03-23 22:20:41,403 | INFO     | Max Cost: 1500
+2026-03-23T22:20:41.406763263Z 2026-03-23 22:20:41,406 | INFO     | ----- UPDATE: ddd item to set, remove item from set, change cost -----
+2026-03-23T22:20:41.410901470Z 2026-03-23 22:20:41,410 | INFO     | ----- QUERY: WRITETIME for cost column -----
+2026-03-23T22:20:41.417292384Z 2026-03-23 22:20:41,417 | INFO     | WriteTime Timestamp: 1774304441406727
+2026-03-23T22:20:41.417341152Z 2026-03-23 22:20:41,417 | INFO     | ----- INSERT: temporary order with 5 seconds TTL -----
+2026-03-23T22:20:41.421284818Z 2026-03-23 22:20:41,421 | INFO     | Waiting 6 seconds to verify TTL deletion...
+2026-03-23T22:20:47.428026226Z 2026-03-23 22:20:47,427 | INFO     | TemporaryUser orders found: 0 (Expected: 0)
+2026-03-23T22:20:47.429185257Z 2026-03-23 22:20:47,428 | INFO     | =========================================
+2026-03-23T22:20:47.429276180Z 2026-03-23 22:20:47,429 | INFO     | TASK EXECUTION FINISHED
+2026-03-23T22:20:47.429384123Z 2026-03-23 22:20:47,429 | INFO     | =========================================
