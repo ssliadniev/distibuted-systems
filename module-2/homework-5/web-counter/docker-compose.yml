@@ -1,0 +1,48 @@
+services:
+  server:
+    build: .
+    container_name: server
+    ports:
+      - "8000:8000"
+    environment:
+      - STORAGE_TYPE=mongo
+      - MONGO_URI=mongodb://mongodb:27017/
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/count')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+    networks:
+      - cassandra_net
+
+  cassandra:
+    image: cassandra:5.0.6
+    container_name: cassandra-db
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=TestCluster
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_RPC_ADDRESS=0.0.0.0
+      - CASSANDRA_START_RPC=false
+    networks:
+      - cassandra_net
+
+  benchmark:
+    build: .
+    container_name: benchmark
+    command: python benchmark.py
+    environment:
+      - SERVER_URL=http://server:8000
+    depends_on:
+      server:
+        condition: service_healthy
+    networks:
+      - cassandra_net
+
+
+networks:
+  cassandra_net:
+    driver: bridge
