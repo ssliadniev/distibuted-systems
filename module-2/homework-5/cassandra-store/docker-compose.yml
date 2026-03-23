@@ -1,0 +1,29 @@
+services:
+  cassandra:
+    image: cassandra:5.0.6
+    container_name: cassandra_db
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=TestCluster
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_RPC_ADDRESS=0.0.0.0
+      - CASSANDRA_START_RPC=false
+    networks:
+      - cassandra_net
+
+  app:
+    build: .
+    container_name: cassandra_store
+    depends_on:
+      - cassandra
+    environment:
+      - CASSANDRA_HOST=cassandra
+    volumes:
+      - ./src:/app/src
+    networks:
+      - cassandra_net
+
+networks:
+  cassandra_net:
+    driver: bridge

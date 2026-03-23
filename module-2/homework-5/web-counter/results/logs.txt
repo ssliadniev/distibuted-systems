@@ -1,0 +1,7 @@
+23:09:34 [INFO] Connecting to server at http://server:8000...
+2026-03-23T23:09:34.158063039Z 23:09:34 [INFO] --- Starting benchmark with 10 client(s) ---
+2026-03-23T23:09:34.158080063Z 23:09:34 [INFO] Target total requests: 100000
+2026-03-23T23:10:48.520416460Z 23:10:48 [INFO] Time taken: 74.3559 seconds
+2026-03-23T23:10:48.520448054Z 23:10:48 [INFO] Final counter value: 100000 (Expected: 100000)
+2026-03-23T23:10:48.520454398Z 23:10:48 [INFO] Throughput: 1344.88 req/sec
+2026-03-23T23:10:48.520460718Z 23:10:48 [INFO] >> Success: no lost updates.
