@@ -1,0 +1,39 @@
+2026-04-05 22:50:15,968 | INFO     | --- Launching Standard Queries Mode ---
+2026-04-05T22:50:15.978342067Z 2026-04-05 22:50:15,978 | ERROR    | Unable to retrieve routing information
+2026-04-05T22:50:15.978397076Z 2026-04-05 22:50:15,978 | WARNING  | Neo4j not ready yet. Retrying in 5 seconds... (Attempt 1/30)
+2026-04-05T22:50:20.979643404Z 2026-04-05 22:50:20,979 | ERROR    | Unable to retrieve routing information
+2026-04-05T22:50:20.979666139Z 2026-04-05 22:50:20,979 | WARNING  | Neo4j not ready yet. Retrying in 5 seconds... (Attempt 2/30)
+2026-04-05T22:50:26.147457289Z 2026-04-05 22:50:26,147 | INFO     | Successfully connected to Neo4j!
+2026-04-05T22:50:27.847800318Z 2026-04-05 22:50:27,847 | INFO     | Database successfully seeded with nodes and relationships.
+2026-04-05T22:50:27.868461263Z 2026-04-05 22:50:27,868 | INFO     | --- QUERY 1: items in order ORD-001 ---
+2026-04-05T22:50:28.292722570Z 2026-04-05 22:50:28,292 | INFO     | {'name': 'Magic Mouse', 'price': 100}
+2026-04-05T22:50:28.292850744Z 2026-04-05 22:50:28,292 | INFO     | {'name': 'MacBook Pro', 'price': 2000}
+2026-04-05T22:50:28.293075199Z 2026-04-05 22:50:28,293 | INFO     | --- QUERY 2: total cost of order ORD-001 ---
+2026-04-05T22:50:28.490868305Z 2026-04-05 22:50:28,490 | INFO     | {'total_cost': 2100}
+2026-04-05T22:50:28.491048992Z 2026-04-05 22:50:28,490 | INFO     | --- QUERY 3: all orders placed by Andrii ---
+2026-04-05T22:50:28.607551574Z 2026-04-05 22:50:28,607 | INFO     | {'order': 'ORD-001'}
+2026-04-05T22:50:28.607609321Z 2026-04-05 22:50:28,607 | INFO     | {'order': 'ORD-002'}
+2026-04-05T22:50:28.607766899Z 2026-04-05 22:50:28,607 | INFO     | --- QUERY 4: all items bought by Andrii ---
+2026-04-05T22:50:28.774386023Z 2026-04-05 22:50:28,774 | INFO     | {'item': 'Magic Mouse'}
+2026-04-05T22:50:28.774423217Z 2026-04-05 22:50:28,774 | INFO     | {'item': 'MacBook Pro'}
+2026-04-05T22:50:28.774470670Z 2026-04-05 22:50:28,774 | INFO     | {'item': 'AirPods'}
+2026-04-05T22:50:28.774683491Z 2026-04-05 22:50:28,774 | INFO     | --- QUERY 5: total quantity of items bought by Andrii ---
+2026-04-05T22:50:28.906593627Z 2026-04-05 22:50:28,906 | INFO     | {'total_items': 4}
+2026-04-05T22:50:28.906713244Z 2026-04-05 22:50:28,906 | INFO     | --- QUERY 6: total amount spent by Andrii ---
+2026-04-05T22:50:29.014777380Z 2026-04-05 22:50:29,014 | INFO     | {'total_spent': 2500}
+2026-04-05T22:50:29.014885856Z 2026-04-05 22:50:29,014 | INFO     | --- QUERY 7: times each item was bought (sorted) ---
+2026-04-05T22:50:29.114002893Z 2026-04-05 22:50:29,113 | INFO     | {'item': 'AirPods', 'times_bought': 3}
+2026-04-05T22:50:29.114131735Z 2026-04-05 22:50:29,114 | INFO     | {'item': 'MacBook Pro', 'times_bought': 2}
+2026-04-05T22:50:29.114250934Z 2026-04-05 22:50:29,114 | INFO     | {'item': 'Magic Mouse', 'times_bought': 1}
+2026-04-05T22:50:29.114462273Z 2026-04-05 22:50:29,114 | INFO     | --- QUERY 8: items viewed by Andrii ---
+2026-04-05T22:50:29.199723106Z 2026-04-05 22:50:29,199 | INFO     | {'item': 'MacBook Pro'}
+2026-04-05T22:50:29.199884896Z 2026-04-05 22:50:29,199 | INFO     | {'item': 'Magic Mouse'}
+2026-04-05T22:50:29.199895005Z 2026-04-05 22:50:29,199 | INFO     | {'item': 'iPad'}
+2026-04-05T22:50:29.200041673Z 2026-04-05 22:50:29,199 | INFO     | --- QUERY 9: items bought together with MacBook Pro ---
+2026-04-05T22:50:29.302186288Z 2026-04-05 22:50:29,302 | INFO     | {'item': 'AirPods'}
+2026-04-05T22:50:29.302263267Z 2026-04-05 22:50:29,302 | INFO     | {'item': 'Magic Mouse'}
+2026-04-05T22:50:29.302418641Z 2026-04-05 22:50:29,302 | INFO     | --- QUERY 10: customers who bought AirPods ---
+2026-04-05T22:50:29.405574320Z 2026-04-05 22:50:29,405 | INFO     | {'customer': 'Andrii'}
+2026-04-05T22:50:29.405636762Z 2026-04-05 22:50:29,405 | INFO     | {'customer': 'Ivan'}
+2026-04-05T22:50:29.405806257Z 2026-04-05 22:50:29,405 | INFO     | --- QUERY 11: items Andrii viewed but did NOT buy ---
+2026-04-05T22:50:29.595346329Z 2026-04-05 22:50:29,595 | INFO     | {'missed_opportunity': 'iPad'}
