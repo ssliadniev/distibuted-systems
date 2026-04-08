@@ -1,0 +1,31 @@
+Initializing Part II Performance & Integrity Tests
+
+
+=== Test 1: Standard Execution (Write Concern: 1) ===
+Starting test...
+-> Execution Time: 53.35 seconds
+-> Final Likes Counter: 100000 / 100000
+-> STATUS: PERFECT CONSISTENCY
+
+=== Test 2: Standard Execution (Write Concern: majority) ===
+Starting test...
+-> Execution Time: 64.05 seconds
+-> Final Likes Counter: 100000 / 100000
+-> STATUS: PERFECT CONSISTENCY
+
+=== Test 3: Sudden Failover Emulation (Write Concern: 1) ===
+ACTION REQUIRED: Go to terminal and prepare to kill the PRIMARY node.
+Press Enter to start the test, then immediately kill the node...
+-> Execution Time: 45.06 seconds
+-> Final Likes Counter: 99965 / 100000
+-> STATUS: DATA LOSS DETECTED
+
+ACTION REQUIRED: Restore the killed node from Test 3 before proceeding.
+Press Enter when cluster is healthy...
+
+=== Test 4: Sudden Failover Emulation (Write Concern: majority) ===
+ACTION REQUIRED: Go to terminal and prepare to kill the PRIMARY node.
+Press Enter to start the test, then immediately kill the node...
+-> Execution Time: 54.90 seconds
+-> Final Likes Counter: 100000 / 100000
+-> STATUS: PERFECT CONSISTENCY

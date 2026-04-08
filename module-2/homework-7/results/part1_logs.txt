@@ -1,0 +1,48 @@
+--- SCENARIO 1: Infinite Timeout ---
+ACTION REQUIRED: Run 'docker-compose kill mongo3'
+Press Enter once mongo3 is stopped...
+
+Executing write with w=3 and wtimeout=0. HANGING...
+ACTION REQUIRED: Run 'docker-compose start mongo3'
+-> Success: Write completed after node restoration.
+
+--- SCENARIO 2: Finite Timeout ---
+ACTION REQUIRED: Run 'docker-compose kill mongo3'
+Press Enter once mongo3 is stopped...
+
+Executing write with w=3 and wtimeout=5000ms...
+-> Success: Caught expected WTimeoutError.
+-> Verification (readConcern majority): {'_id': ObjectId('69d590baef1259a58bb3e40c'), 'test': 'finite'}
+
+ACTION REQUIRED: Run 'docker-compose start mongo3'
+Press Enter once mongo3 is restarted...
+
+--- SCENARIO 3: Standard Elections & Sync ---
+ACTION REQUIRED: Run 'docker-compose kill mongo1'
+Press Enter once mongo1 is stopped...
+-> Data written to new primary.
+ACTION REQUIRED: Run 'docker-compose start mongo1'
+Press Enter once mongo1 is restarted and synced...
+-> Verification on restored node: {'_id': ObjectId('69d590f4ef1259a58bb3e40d'), 'test': 'election_sync'}
+
+--- SCENARIO 4: Inconsistent State & Rollback ---
+ACTION REQUIRED: Run 'docker-compose kill mongo2 mongo3'
+Press Enter IMMEDIATELY (within 5s)...
+-> Read 'local': {'_id': ObjectId('69d59140ef1259a58bb3e40e'), 'test': 'rollback_data'}
+-> Read 'majority': None
+
+ACTION REQUIRED: Run 'docker-compose kill mongo1', then 'docker-compose start mongo2 mongo3'
+Press Enter once new master is elected...
+ACTION REQUIRED: Run 'docker-compose start mongo1'
+Press Enter once mongo1 is back up...
+-> Post-rollback check (expected None): None
+
+--- SCENARIO 5: Eventual Consistency (Delayed Replica) ---
+-> Cluster reconfigured: mongo3 is now a delayed replica (5s).
+ACTION REQUIRED: Run 'docker-compose kill mongo2'
+Press Enter once mongo2 is stopped...
+-> Reading with linearizable concern (waiting for delayed replica)...
+-> Result: {'_id': ObjectId('69d592d4ef1259a58bb3e410'), 'test': 'eventual_consistency'}
+-> Delay observed: 5.02 seconds.
+
+--- Part I Tests Complete! ---
