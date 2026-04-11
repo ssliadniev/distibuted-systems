@@ -1,0 +1,54 @@
+services:
+  cassandra1:
+    image: cassandra:latest
+    restart: on-failure
+    environment:
+      - CASSANDRA_CLUSTER_NAME=MyCluster
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=128M
+    ports:
+      - "9042:9042"
+    networks:
+      - cassandra-net
+
+  cassandra2:
+    image: cassandra:latest
+    restart: on-failure
+    environment:
+      - CASSANDRA_CLUSTER_NAME=MyCluster
+      - CASSANDRA_SEEDS=cassandra1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=128M
+    depends_on:
+      - cassandra1
+    networks:
+      - cassandra-net
+
+  cassandra3:
+    image: cassandra:latest
+    restart: on-failure
+    environment:
+      - CASSANDRA_CLUSTER_NAME=MyCluster
+      - CASSANDRA_SEEDS=cassandra1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=128M
+    depends_on:
+      - cassandra1
+    networks:
+      - cassandra-net
+
+  app:
+    build: .
+    profiles:
+      - client
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - cassandra-net
+
+networks:
+  cassandra-net:
+    driver: bridge
