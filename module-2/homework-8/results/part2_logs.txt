@@ -1,0 +1,14 @@
+Connecting to Cassandra cluster...
+Setting up Keyspace (RF=3) and Counter table...
+
+=== Testing Write Consistency: ONE ===
+-> Time taken: 49.98 seconds
+-> Final Likes: 100000 / 100000
+-> RESULT: PERFECT CONSISTENCY! No updates were lost.
+
+=== Testing Write Consistency: QUORUM ===
+-> Time taken: 35.10 seconds
+-> Final Likes: 100000 / 100000
+-> RESULT: PERFECT CONSISTENCY! No updates were lost.
+
+--- Performance Tests Complete! ---
