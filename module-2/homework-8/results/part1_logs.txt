@@ -1,0 +1,100 @@
+=== Checking Cluster Status ===
+
+[EXECUTING] docker exec homework-8-cassandra1-1 nodetool status
+Datacenter: dc1
+===============
+Status=Up/Down
+|/ State=Normal/Leaving/Joining/Moving
+--  Address     Load       Tokens  Owns (effective)  Host ID                               Rack
+UN  172.21.0.4  80.05 KiB  16      76.0%             62d015a8-0c95-4fab-b805-4213363e7675  rack1
+UN  172.21.0.3  80.05 KiB  16      59.3%             8eebbe0a-850e-4bf7-a3f2-23f13cee9d9f  rack1
+UN  172.21.0.2  119.8 KiB  16      64.7%             fd1409a5-f0a5-4ced-979a-049915ec717f  rack1
+
+=== 1. Creating keyspaces and tables  ===
+-> Keyspaces (RF1, RF2, RF3) and tables created.
+
+=== 2. Connecting to different nodes ===
+
+[EXECUTING] docker exec homework-8-cassandra2-1 cqlsh -e INSERT INTO ks_rf3.users (id, name) VALUES (1, 'Alice');
+
+[EXECUTING] docker exec homework-8-cassandra3-1 cqlsh -e SELECT * FROM ks_rf3.users WHERE id = 1;
+id | name
+----+-------
+  1 | Alice
+
+(1 rows)
+
+=== 3. Checking data distribution  ===
+
+[EXECUTING] docker exec homework-8-cassandra1-1 nodetool status ks_rf3
+Datacenter: dc1
+===============
+Status=Up/Down
+|/ State=Normal/Leaving/Joining/Moving
+--  Address     Load        Tokens  Owns (effective)  Host ID                               Rack
+UN  172.21.0.4  80.05 KiB   16      100.0%            62d015a8-0c95-4fab-b805-4213363e7675  rack1
+UN  172.21.0.3  80.05 KiB   16      100.0%            8eebbe0a-850e-4bf7-a3f2-23f13cee9d9f  rack1
+UN  172.21.0.2  120.69 KiB  16      100.0%            fd1409a5-f0a5-4ced-979a-049915ec717f  rack1
+
+[EXECUTING] docker exec homework-8-cassandra1-1 nodetool getendpoints ks_rf3 users 1
+172.21.0.3
+172.21.0.4
+172.21.0.2
+
+=== 4. Testing lightweight transactions (unpartitioned)  ===
+  [SUCCESS] LWT Write (Healthy Cluster)
+
+=== 5. Testing consistency levels with a down node  ===
+
+[EXECUTING] docker stop homework-8-cassandra3-1
+homework-8-cassandra3-1
+Sleeping for 15 seconds to let the cluster detect the downed node...
+
+Testing ks_rf1 (RF=1)
+  [EXPECTED FAIL] ks_rf1 CL=ONE -> Unavailable: Error from server: code=1000 [Unavailable exception] message="Cannot achieve consistency level ONE" info={'consistency': 'ONE', 'required_replicas': 1, 'alive_replicas': 0}
+
+Testing ks_rf2 (RF=2)
+  [SUCCESS] ks_rf2 CL=ONE
+  [EXPECTED FAIL] ks_rf2 CL=TWO -> Unavailable: Error from server: code=1000 [Unavailable exception] message="Cannot achieve consistency level TWO" info={'consistency': 'TWO', 'required_replicas': 2, 'alive_replicas': 1}
+
+Testing ks_rf3 (RF=3)
+  [SUCCESS] ks_rf3 CL=ONE (Requires 1 node)
+  [SUCCESS] ks_rf3 CL=TWO (Requires 2 nodes)
+  [EXPECTED FAIL] ks_rf3 CL=THREE (Requires 3 nodes - SHOULD FAIL) -> Unavailable: Error from server: code=1000 [Unavailable exception] message="Cannot achieve consistency level THREE" info={'consistency': 'THREE', 'required_replicas': 3, 'alive_replicas': 2}
+
+Starting homework-8-cassandra3-1 back up...
+
+[EXECUTING] docker start homework-8-cassandra3-1
+homework-8-cassandra3-1
+Sleeping for 40 seconds to let gossip protocol repair the ring...
+
+=== 6. Split brain & conflict resolution  ===
+
+[EXECUTING] docker network disconnect homework-8_cassandra-net homework-8-cassandra2-1
+
+[EXECUTING] docker network disconnect homework-8_cassandra-net homework-8-cassandra3-1
+Sleeping for 15 seconds to ensure network partition is registered...
+
+Testing LWT in partitioned cluster
+  [UNEXPECTED ERROR] LWT Write (Partitioned - cannot achieve paxos quorum) -> errors={'172.21.0.4:9042': 'Client request timeout. See Session.execute[_async](timeout)'}, last_host=172.21.0.4:9042
+
+Writing conflicting data during partition...
+  [SUCCESS] Write to Node 1 (CL=ONE)
+
+Writing to isolated Node 2 via cqlsh...
+
+[EXECUTING] docker exec homework-8-cassandra2-1 cqlsh -e CONSISTENCY ONE; INSERT INTO ks_rf3.users (id, name) VALUES (100, 'Conflict_Node2');
+Consistency level set to ONE.
+
+Restoring the network...
+
+[EXECUTING] docker network connect homework-8_cassandra-net homework-8-cassandra2-1
+
+[EXECUTING] docker network connect homework-8_cassandra-net homework-8-cassandra3-1
+Sleeping for 40 seconds to let the cluster heal and resolve conflicts...
+
+=== 7. Checking conflict resolution ===
+-> Final resolved value across cluster: 'Conflict_Node2'
+-> Conclusion: Cassandra resolves conflicts using Last-Write-Wins (LWW) based on internal cell timestamps.
+
+--- Cassandra part 1 & 2 tests complete! ---
